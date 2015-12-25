@@ -17,6 +17,7 @@ Istanbul,Baghdad,{}
 Mumbai,Karachi,{}
 Mumbai,Chennai,{}
 Mumbai,Delhi,{}
+Los Angeles,Chicago,{}
 Paris,Madrid,{}
 Paris,Algiers,{}
 Paris,Essen,{}
@@ -34,6 +35,7 @@ Manila,Ho Chi Minh,{}
 Manila,San Francisco,{}
 Manila,Hong Kong,{}
 Manila,Taipei,{}
+Manila,Sydney,{}
 Kolkata,Bangkok,{}
 Kolkata,Chennai,{}
 Kolkata,Hong Kong,{}
@@ -51,12 +53,15 @@ Seoul,Beijing,{}
 Seoul,Tokyo,{}
 Delhi,Tehran,{}
 Delhi,Karachi,{}
+Delhi,Kolkata,{}
+Delhi,Chennai,{}
 Buenos Aires,Bogota,{}
 Khartoum,Cairo,{}
 Khartoum,Lagos,{}
 Bangkok,Jakarta,{}
 Bangkok,Hong Kong,{}
 Bangkok,Ho Chi Minh,{}
+Moscow,Tehran,{}
 Baghdad,Tehran,{}
 Baghdad,Cairo,{}
 Baghdad,Karachi,{}
