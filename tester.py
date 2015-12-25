@@ -1,13 +1,29 @@
+'''
+  Test-driven development code for pandemic.py.
+  @author: Josh Snider
+'''
 import pandemic
 import unittest
 
 class Tests(unittest.TestCase):
 
+  def test_best_placement(self):
+    brd = pandemic.Board()
+    assert brd.best_placements(1) == [['Atlanta']]
+    #print(brd.best_placements(1))
+    #print(brd.best_placements(2))
+    assert brd.best_placements(3) == [['Atlanta', 'Hong Kong', 'Cairo']]
+    #print(brd.best_placements(4))
+    #print(brd.best_placements(5))
+    #print(brd.best_placements(6))
+    #assert brd.best_placements(6) == [['Atlanta', 'Paris', 'Khartoum',
+    #  'Hong Kong', 'Karachi', 'Bogota']]
+
   def test_distance(self):
     ''' Do you we calculate the distances to the
         nearest research center correctly. '''
-    brd = pandemic.load_board()
-    distances = pandemic.research_dist(brd, ['Atlanta', 'Hong Kong'])
+    brd = pandemic.Board()
+    distances = brd.research_dist(['Atlanta', 'Hong Kong'])
     assert distances['Atlanta'] == 0
     assert distances['Hong Kong'] == 0
     assert distances['Taipei'] == 1
@@ -16,7 +32,7 @@ class Tests(unittest.TestCase):
 
   def test_neighbors(self):
     ''' Check that everyone has the correct number of neighbors. '''
-    brd = pandemic.load_board()
+    brd = pandemic.Board()
     assert len(brd.neighbors('Hong Kong')) == 6
     assert len(brd.neighbors('Bangkok')) == 5
     assert len(brd.neighbors('Chennai')) == 5
@@ -67,15 +83,15 @@ class Tests(unittest.TestCase):
 
   def test_numcities(self):
     ''' Check that we're not missing cities. '''
-    brd = pandemic.load_board()
+    brd = pandemic.Board()
     assert len(brd) == 48
 
   def test_numlayouts(self):
     ''' Check how many layouts there are with n centers. '''
-    brd = pandemic.load_board()
-    assert len(list(pandemic.center_placements(brd, 1))) == 1
-    assert len(list(pandemic.center_placements(brd, 2))) == 47
-    assert len(list(pandemic.center_placements(brd, 3))) == 1081
+    brd = pandemic.Board()
+    assert len(list(brd.center_placements(1))) == 1
+    assert len(list(brd.center_placements(2))) == 47
+    assert len(list(brd.center_placements(3))) == 1081
 
 if __name__ == '__main__':
   unittest.main()
