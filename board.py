@@ -1,3 +1,4 @@
+import itertools
 import networkx as nx
 from scipy import stats
 
@@ -21,6 +22,15 @@ def print_connectivity(board):
   print('There\'s a very strong correlation between a node\'s degree and ' +
     'centrality. The correlation is ' + str(corr) + ' with a very strong ' +
     'p-value of ' + str(pvalue) + '.')
+
+def center_placements(board, numcenters):
+  ''' Iterate over the possible placements of a given number of
+      research centers. '''
+  assert  6 >= numcenters >= 1
+  cities = set(board)
+  cities.remove("Atlanta")
+  for combo in itertools.combinations(cities, numcenters - 1):
+    yield ["Atlanta"] + list(combo)
 
 if __name__ == '__main__':
   print('First, we load the board from a saved edge list.')
