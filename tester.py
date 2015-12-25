@@ -3,6 +3,17 @@ import unittest
 
 class Tests(unittest.TestCase):
 
+  def test_distance(self):
+    ''' Do you we calculate the distances to the
+        nearest research center correctly. '''
+    brd = pandemic.load_board()
+    distances = pandemic.research_dist(brd, ['Atlanta', 'Hong Kong'])
+    assert distances['Atlanta'] == 0
+    assert distances['Hong Kong'] == 0
+    assert distances['Taipei'] == 1
+    assert distances['Los Angeles'] == 2
+    assert distances['Kinshasa'] == 5
+
   def test_neighbors(self):
     ''' Check that everyone has the correct number of neighbors. '''
     brd = pandemic.load_board()
