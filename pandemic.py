@@ -23,6 +23,18 @@ def print_connectivity(board):
     'centrality. The correlation is ' + str(corr) + ' with a very strong ' +
     'p-value of ' + str(pvalue) + '.')
 
+def research_dist(board, centers):
+  ''' Calculate the distance between each city and the given centers
+      and return it as a map. '''
+  dists = nx.shortest_path_length(board)
+  retval = {}
+  for city in board:
+    for center in centers:
+      dist = dists[city][center]
+      if city not in retval or retval[city] > dist:
+        retval[city] = dist
+  return retval
+
 def center_placements(board, numcenters):
   ''' Iterate over the possible placements of a given number of
       research centers. '''
