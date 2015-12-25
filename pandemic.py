@@ -2,6 +2,15 @@ import itertools
 import networkx as nx
 from scipy import stats
 
+def center_placements(board, numcenters):
+  ''' Iterate over the possible placements of a given number of
+      research centers. '''
+  assert  6 >= numcenters >= 1
+  cities = set(board)
+  cities.remove("Atlanta")
+  for combo in itertools.combinations(cities, numcenters - 1):
+    yield ["Atlanta"] + list(combo)
+
 def load_board():
   return nx.read_edgelist('board.dat', delimiter=',')
 
@@ -34,15 +43,6 @@ def research_dist(board, centers):
       if city not in retval or retval[city] > dist:
         retval[city] = dist
   return retval
-
-def center_placements(board, numcenters):
-  ''' Iterate over the possible placements of a given number of
-      research centers. '''
-  assert  6 >= numcenters >= 1
-  cities = set(board)
-  cities.remove("Atlanta")
-  for combo in itertools.combinations(cities, numcenters - 1):
-    yield ["Atlanta"] + list(combo)
 
 if __name__ == '__main__':
   print('First, we load the board from a saved edge list.')
