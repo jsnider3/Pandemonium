@@ -3,11 +3,6 @@ import unittest
 
 class Tests(unittest.TestCase):
 
-  def test_numcities(self):
-    ''' Check that we're not missing cities. '''
-    brd = board.load_board()
-    assert len(brd) == 48
-
   def test_neighbors(self):
     ''' Check that everyone has the correct number of neighbors. '''
     brd = board.load_board()
@@ -58,6 +53,18 @@ class Tests(unittest.TestCase):
     assert len(brd.neighbors('Buenos Aires')) == 2
     assert len(brd.neighbors('Johannesburg')) == 2
     assert len(brd.neighbors('Santiago')) == 1
+
+  def test_numcities(self):
+    ''' Check that we're not missing cities. '''
+    brd = board.load_board()
+    assert len(brd) == 48
+
+  def test_numlayouts(self):
+    ''' Check how many layouts there are with n centers. '''
+    brd = board.load_board()
+    assert len(list(board.center_placements(brd, 1))) == 1
+    assert len(list(board.center_placements(brd, 2))) == 47
+    assert len(list(board.center_placements(brd, 3))) == 1081
 
 if __name__ == '__main__':
   unittest.main()
