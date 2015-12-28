@@ -137,7 +137,7 @@ class Board(nx.Graph):
     print("One way we can separate the world into regions is with a Voronoi " +
       "diagram where each research center in the optimal six center layout " +
       "is the center of a zone.")
-    voronoi = self.voronoi_regions(bests[-1][0])
+    voronoi = self.voronoi_regions(centers)
     for region in voronoi:
       print(region +": " + ', '.join(voronoi[region]))
 
