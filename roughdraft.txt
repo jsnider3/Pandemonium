@@ -1,0 +1,154 @@
+Pandemic is a great board game, where the players represent
+agents of the Center for Disease Control and must work together
+to stop four epidemics from growing out of control. Players
+can build research centers which allow you to make cures for the
+disease as well as allowing them to travel around the world faster.
+(TODO pandemicMap.jpg)
+
+First, we load the board from a saved edge list.
+Then we replicate Matt Wigway's results from him blog post at http://www.indicatrix.org/2014/03/26/overanalyzing-board-games-network-analysis-and-pandemic/.
+[u'Santiago', '0.00617591510206', '1']
+[u'Johannesburg', '0.0154561777473', '2']
+[u'Buenos Aires', '0.0196818864023', '2']
+[u'Kinshasa', '0.0200914664916', '3']
+[u'Lagos', '0.024766083641', '3']
+[u'Lima', '0.0268220512166', '3']
+[u'Atlanta', '0.0376927493913', '3']
+[u'Montreal', '0.0403328663271', '3']
+[u'Sao Paulo', '0.0404324206688', '4']
+[u'Washington', '0.040605310228', '4']
+[u'Miami', '0.0434286084369', '4']
+[u'Bogota', '0.0450454304557', '5']
+[u'Khartoum', '0.0470339007238', '4']
+[u'New York', '0.054893868982', '4']
+[u'Beijing', '0.0562359233579', '2']
+[u'Osaka', '0.0643883117632', '2']
+[u'Mexico City', '0.0652670776334', '5']
+[u'London', '0.0713602782106', '4']
+[u'Essen', '0.0729454518182', '4']
+[u'St. Petersburg', '0.0743611538763', '3']
+[u'Seoul', '0.0744572557682', '3']
+[u'Milan', '0.0751050249634', '3']
+[u'Chicago', '0.0796660803023', '5']
+[u'Madrid', '0.0861026173003', '5']
+[u'Los Angeles', '0.0884941819147', '4']
+[u'Moscow', '0.0927410165533', '3']
+[u'Paris', '0.0959706851301', '5']
+[u'Tokyo', '0.097357620102', '4']
+[u'Algiers', '0.111280721025', '4']
+[u'San Francisco', '0.114205406407', '4']
+[u'Riyadh', '0.12406948652', '3']
+[u'Sydney', '0.125195372161', '3']
+[u'Cairo', '0.143952359177', '5']
+[u'Istanbul', '0.157260443095', '6']
+[u'Shanghai', '0.169778595896', '5']
+[u'Tehran', '0.171149983787', '4']
+[u'Mumbai', '0.172742688198', '3']
+[u'Taipei', '0.182284451256', '4']
+[u'Baghdad', '0.185535295048', '5']
+[u'Karachi', '0.209343941172', '5']
+[u'Jakarta', '0.224753744083', '4']
+[u'Manila', '0.230481804184', '5']
+[u'Ho Chi Minh', '0.252286801422', '4']
+[u'Delhi', '0.255684010981', '5']
+[u'Kolkata', '0.272007607474', '4']
+[u'Chennai', '0.28519763084', '5']
+[u'Bangkok', '0.313436248643', '5']
+[u'Hong Kong', '0.327022542843', '6']
+
+There's a very strong correlation between a node's degree and
+centrality. The correlation is 0.583671004341 with a very strong
+p-value of 1.33442315419e-05.
+
+Now what we want is to find a set of n cities, where we can put
+research centers in order to minimize the average and max distances
+from a city without to a city with a research center. We are interested
+in values of n between 1 and 6 (inclusive) as we don't have enough pieces
+to have more than six research centers. An important constraint, is that
+we are required to have one research center in Atlanta. As per
+http://math.stackexchange.com/q/1309646/, this is reducible to the problem
+of finding a dominating set which is known to be NP-Hard. Fortunately,
+this problem (despite being NP-Complete) is solvable in reasonable time
+for a problem as small as ours. Especially when you cache the all-pairs
+shortest paths matrix.
+
+Obviously, with only one research center the only possible placement is
+['Atlanta'] which is therefore optimal.
+
+With two research centers the optimal solution is to pair Atlanta with
+either Baghdad or Cairo.
+(TODO Picture)
+
+With three research centers there's one optimal solution with the mandatory
+Atlanta, Hong Kong covering East Asia, and Cairo providing fast travel to Africa, Europe, and the Mideast.
+(TODO Picture)
+
+With four research centers, we take the optimal solution for three, move
+our Mideast center to Istanbul and put our fourth in Sao Paulo to cover
+the southwest side of the globe.
+(TODO Picture)
+
+With five research centers, we have seven equally good choices [
+['Atlanta', u'Istanbul', u'Shanghai', u'Sao Paulo', u'Chennai'],
+['Atlanta', u'Istanbul', u'Sao Paulo', u'Delhi', u'Hong Kong'],
+['Atlanta', u'Istanbul', u'Sao Paulo', u'Hong Kong', u'Karachi'],
+['Atlanta', u'Paris', u'Baghdad', u'Hong Kong', u'Bogota'],
+['Atlanta', u'Paris', u'Hong Kong', u'Bogota', u'Cairo'],
+['Atlanta', u'Hong Kong', u'Essen', u'Bogota', u'Cairo'],
+['Atlanta', u'Hong Kong', u'Bogota', u'Cairo', u'London']]
+(TODO Picture)
+
+Finally, with six research centers we can cover all corners of the
+globe with Atlanta, Paris, Khartoum, Hong Kong, Karachi, Bogota.
+(TODO Picture)
+
+Of course, it's not possible for us to build a research center in
+Cairo and then move it to Istanbul when that's better for us. In fact,
+unless one of the player's is the operations expert it's unlikely we
+can build research stations in the optimal locations at will. What we
+want now is a ranking of which cities are the best for research centers
+and a separation of them into regions where we understand that it's
+never a good deal to put two research centers in the same region.
+
+The centrality measure previously discussed is a good judge of how good
+building a research center in a city is, but let's check our work by
+counting how many times each city appears in the optimal placements.
+(u'Shanghai', 1)
+(u'Chennai', 1)
+(u'Delhi', 1)
+(u'Khartoum', 1)
+(u'London', 1)
+(u'Essen', 1)
+(u'Baghdad', 2)
+(u'Karachi', 2)
+(u'Paris', 3)
+(u'Istanbul', 4)
+(u'Sao Paulo', 4)
+(u'Bogota', 5)
+(u'Cairo', 5)
+(u'Hong Kong', 9)
+(u'Atlanta', 13)
+(TODO How much is this correlated?)
+(TODO Picture)
+
+One way we can separate the world into regions is with a Voronoi
+diagram where each research center in the optimal six center layout
+is the center of a zone.
+Central Asia: Moscow, Delhi, Baghdad, Tehran, Karachi, Riyadh, Mumbai
+Europes: Istanbul, Paris, St. Petersburg, London, Algiers, Milan, Madrid,
+  Essen
+Africa: Kinshasa, Johannesburg, Khartoum, Lagos, Cairo
+Latin America: Mexico City, Sao Paulo, Santiago, Buenos Aires, Lima,
+  Bogota
+North America: Chicago, San Francisco, Los Angeles, Atlanta, Miami,
+  Montreal, Washington, New York
+East Asia: Manila, Shanghai, Sydney, Kolkata, Chennai, Seoul, Bangkok,
+  Taipei, Hong Kong, Ho Chi Minh, Tokyo, Jakarta, Beijing, Osaka
+(TODO Picture)
+
+Of course, we've artificially constricted ourselves by always having
+a research center in Atlanta. Is it possible to come to a better solution
+by relaxing that requirement? What if we've already been forced to put
+a research center in Santiago? Where should we put the rest of our
+stations if we've already made suboptimal moves? These are the kinds of
+questions that might be covered in the future.
