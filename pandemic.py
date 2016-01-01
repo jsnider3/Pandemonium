@@ -131,6 +131,22 @@ class Board(nx.Graph):
     for city in sorted(cities, key=occurences.count):
       if occurences.count(city):
         print(city, occurences.count(city))
+    lone = []
+    ltwo = []
+    centrality = nx.eigenvector_centrality(self, max_iter=1000)
+    for city in cities:
+      lone.append(occurences.count(city))
+      ltwo.append(centrality[city])
+    (corr, pvalue) = stats.pearsonr(lone, ltwo)
+    print ("The correlation is " + str((corr, pvalue)))
+    lone = []
+    ltwo = []
+    for city in cities:
+      if city != "Atlanta":
+        lone.append(occurences.count(city))
+        ltwo.append(centrality[city])
+    (corr, pvalue) = stats.pearsonr(lone, ltwo)
+    print ("The correlation without Atlanta is " + str((corr, pvalue)))
 
   def print_regions(self, centers):
     ''' Print the voronoi regions for a given list of centers. '''
