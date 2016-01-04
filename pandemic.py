@@ -9,10 +9,14 @@ from scipy import stats
 
 class Board(nx.Graph):
 
-  def __init__(self):
+  def __init__(self,**kwargs):
     ''' Subclass a networkx graph.'''
     nx.Graph.__init__(self, self.default_board())
     self.shortest_paths = nx.shortest_path_length(self)
+    if "start" in kwargs:
+      self.starting_city = kwargs["start"]
+    else:
+      self.starting_city = "Atlanta"
 
   def best_placements(board, numcenters):
     ''' Get the places you can put n research centers to
@@ -30,14 +34,18 @@ class Board(nx.Graph):
         best.append(placement)
     return best
 
-  def center_placements(board, numcenters):
+  def center_placements(self, numcenters):
     ''' Iterate over the possible placements of a given number of
-        research centers. '''
-    assert  6 >= numcenters >= 1
-    cities = set(board)
-    cities.remove("Atlanta")
+        research centers. Seven is six without the starting constraint. '''
+    assert  7 >= numcenters >= 1
+    cities = set(self)
+    if numcenters < 7:
+      cities.remove(self.starting_city)
     for combo in itertools.combinations(cities, numcenters - 1):
-      yield ["Atlanta"] + list(combo)
+      if numcenters < 7:
+        yield [self.starting_city] + list(combo)
+      else:
+        yield list(combo)
 
   def default_board(self):
     ''' A graph representing the stock board. '''
@@ -174,11 +182,18 @@ class Board(nx.Graph):
       retval[closest].append(city)
     return retval
 
-if __name__ == '__main__':
+def make_rough_draft():
+  ''' Outputs the rough draft for the blog post I made. '''
   print('First, we load the board from a saved edge list.')
   board = Board()
   print('Then we replicate Matt Wigway\'s results from him blog post at '
     + 'http://www.indicatrix.org/2014/03/26/overanalyzing-board-games-network-analysis-and-pandemic/.')
   board.print_connectivity()
   board.print_best_placements()
+
+if __name__ == '__main__':
+  brd = Board(start="Atlanta")
+  for num in range(1, 8):
+    print(num, brd.best_placements(num))
+
 
