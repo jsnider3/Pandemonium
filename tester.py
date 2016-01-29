@@ -8,7 +8,7 @@ import unittest
 class Tests(unittest.TestCase):
 
   def test_best_placement(self):
-    brd = pandemic.Board()
+    brd = pandemic.Board(False)
     assert brd.best_placements(1) == [['Atlanta']]
     #print(brd.best_placements(1))
     #print(brd.best_placements(2))
@@ -22,7 +22,7 @@ class Tests(unittest.TestCase):
   def test_distance(self):
     ''' Do you we calculate the distances to the
         nearest research center correctly. '''
-    brd = pandemic.Board()
+    brd = pandemic.Board(False)
     distances = brd.research_dist(['Atlanta', 'Hong Kong'])
     assert distances['Atlanta'] == 0
     assert distances['Hong Kong'] == 0
@@ -32,7 +32,7 @@ class Tests(unittest.TestCase):
 
   def test_neighbors(self):
     ''' Check that everyone has the correct number of neighbors. '''
-    brd = pandemic.Board()
+    brd = pandemic.Board(False)
     assert len(brd.neighbors('Hong Kong')) == 6
     assert len(brd.neighbors('Bangkok')) == 5
     assert len(brd.neighbors('Chennai')) == 5
@@ -83,12 +83,12 @@ class Tests(unittest.TestCase):
 
   def test_numcities(self):
     ''' Check that we're not missing cities. '''
-    brd = pandemic.Board()
+    brd = pandemic.Board(False)
     assert len(brd) == 48
 
   def test_numlayouts(self):
     ''' Check how many layouts there are with n centers. '''
-    brd = pandemic.Board()
+    brd = pandemic.Board(False)
     assert len(list(brd.center_placements(1))) == 1
     assert len(list(brd.center_placements(2))) == 47
     assert len(list(brd.center_placements(3))) == 1081

@@ -9,9 +9,10 @@ from scipy import stats
 
 class Board(nx.Graph):
 
-  def __init__(self,**kwargs):
+  def __init__(self, legacy, **kwargs):
     ''' Subclass a networkx graph.'''
-    nx.Graph.__init__(self, self.default_board())
+    nx.Graph.__init__(self,
+        self.legacy_board() if legacy else self.default_board())
     self.shortest_paths = nx.shortest_path_length(self)
     if "start" in kwargs:
       self.starting_city = kwargs["start"]
@@ -50,6 +51,10 @@ class Board(nx.Graph):
   def default_board(self):
     ''' A graph representing the stock board. '''
     return nx.read_edgelist('board.dat', delimiter=',')
+
+  def legacy_board(self):
+    ''' A graph representing the Pandemic Legacy Season 1 board. '''
+    return nx.read_edgelist('board_legacy.dat', delimiter=',')
 
   def print_connectivity(board):
     ''' Print some statistics about the nodes' centrality
@@ -185,15 +190,20 @@ class Board(nx.Graph):
 def make_rough_draft():
   ''' Outputs the rough draft for the blog post I made. '''
   print('First, we load the board from a saved edge list.')
-  board = Board()
+  board = Board(False)
   print('Then we replicate Matt Wigway\'s results from him blog post at '
     + 'http://www.indicatrix.org/2014/03/26/overanalyzing-board-games-network-analysis-and-pandemic/.')
   board.print_connectivity()
   board.print_best_placements()
 
 if __name__ == '__main__':
-  brd = Board(start="Atlanta")
+  brd = Board(True, start="Atlanta")
+  occurs = []
   for num in range(1, 8):
-    print(num, brd.best_placements(num))
-
+    occurs.append(brd.best_placements(num))
+    if num < 6:
+      print(num, occurs[-1])
+    else:
+      print(num, str(len(occurs[-1])) + " options")
+  brd.print_most_often_optimal(occurs)
 
